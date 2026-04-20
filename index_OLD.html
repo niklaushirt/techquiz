@@ -335,7 +335,7 @@
       </svg>
     </div>
     <div>
-      <div class="brand"><strong>TechQuiz</strong>Microservices &amp; Kubernetes</div>
+      <div class="brand"><strong>Nick's TechQuiz</strong>Microservices &amp; Kubernetes</div>
     </div>
   </div>
 
@@ -343,9 +343,9 @@
   <div class="card">
     <div id="start-screen" class="screen active">
       <h1>Test Your <span>Microservices &amp; K8s</span> Knowledge</h1>
-      <p>20 questions covering microservices patterns, Docker containers, and Kubernetes fundamentals.</p>
+      <p>15 questions covering microservices patterns, Docker containers, and Kubernetes fundamentals.</p>
       <div class="stat-row">
-        <div class="stat"><div class="val">20</div><div class="lbl">Questions</div></div>
+        <div class="stat"><div class="val">15</div><div class="lbl">Questions</div></div>
         <div class="stat"><div class="val">4</div><div class="lbl">Options each</div></div>
         <div class="stat"><div class="val">∞</div><div class="lbl">Attempts</div></div>
       </div>
@@ -356,7 +356,7 @@
     <div id="quiz-panel">
       <div class="progress-wrap"><div class="progress-bar" id="progress-bar"></div></div>
       <div class="meta">
-        <span>Question <span class="q-counter" id="q-counter">1 / 20</span></span>
+        <span>Question <span class="q-counter" id="q-counter">1 / 15</span></span>
         <span class="score-badge">Score: <span id="score-display">0</span></span>
       </div>
       <div class="question-wrap">
@@ -372,7 +372,7 @@
     <div id="result-screen" class="screen">
       <div class="result-ring">
         <div class="result-score" id="final-score">0</div>
-        <div class="result-label">/ 20</div>
+        <div class="result-label">/ 15</div>
       </div>
       <div class="result-grade" id="result-grade"></div>
       <p id="result-msg"></p>
@@ -401,108 +401,168 @@
 
 <script>
 const QUESTIONS = [
-  // ── ADVANCED ──
-  {
-    q: "What is the difference between CMD and ENTRYPOINT in a Dockerfile?",
-    opts: ["CMD runs at build time, ENTRYPOINT runs at runtime", "ENTRYPOINT defines the executable; CMD provides default arguments that can be overridden", "They are identical", "CMD is for Linux images, ENTRYPOINT for Windows images"],
-    ans: 1,
-    hint: "ENTRYPOINT sets the main executable; CMD sets default args. CMD is easily overridden at `docker run`."
-  },
+  // ── MICROSERVICES ──
 
 
   {
-    q: "What is etcd in Kubernetes?",
-    opts: ["A container runtime", "A distributed key-value store that holds cluster state", "A network proxy", "A logging agent"],
-    ans: 1,
-    hint: "etcd is the backing store for all Kubernetes cluster data — it's the source of truth."
+    q: "What does the acronym 'K8s' stand for?",
+    opts: ["Kubernetes", "KubeServices", "KernelSystem", "KloudBase"],
+    ans: 0,
+    hint: "K8s is a shorthand for Kubernetes — there are 8 letters between the 'K' and the 's'."
   },
   {
-    q: "What is a Kubernetes Service of type 'ClusterIP'?",
-    opts: ["Exposes the service externally via a cloud load balancer", "Exposes the service only within the cluster — no external access", "Maps a port on every node", "Assigns a static IP to a Pod"],
-    ans: 1,
-    hint: "ClusterIP is the default Service type — the service is reachable only from within the cluster."
-  },
-
-  {
-    q: "In Kubernetes, what is a 'rolling update'?",
-    opts: ["Replacing all pods simultaneously with downtime", "Updating pods incrementally so the app stays available throughout", "A weekly scheduled restart", "Migrating workloads to a new cluster"],
-    ans: 1,
-    hint: "Rolling updates replace old Pod replicas with new ones gradually — zero downtime deploys."
+    q: "What file format is most commonly used to write Kubernetes manifests?",
+    opts: ["JSON only", "XML", "YAML", "TOML"],
+    ans: 2,
+    hint: "Kubernetes resource definitions are almost always written in YAML."
   },
   {
-    q: "What is a Kubernetes 'control plane'?",
-    opts: ["The dashboard UI for Kubernetes", "The set of components that manage and control the cluster state", "The physical machines running workloads", "The ingress controller"],
+    q: "Which command is the main CLI tool for interacting with a Kubernetes cluster?",
+    opts: ["kubeadm", "kubectl", "helm", "kubelet"],
     ans: 1,
-    hint: "The control plane (API server, scheduler, controller manager, etcd) makes global decisions about the cluster."
+    hint: "`kubectl` is the command-line interface for running commands against Kubernetes clusters."
   },
 
   {
-    q: "In Kubernetes, what is a 'readiness probe'?",
-    opts: ["Checks if a container is healthy enough to restart", "Determines if a pod is ready to receive traffic", "Validates the Docker image", "Monitors CPU usage"],
+    q: "What does a Docker container run on top of?",
+    opts: ["A hypervisor", "The host operating system kernel", "A separate Linux VM always", "JVM"],
     ans: 1,
-    hint: "A readiness probe tells Kubernetes when a Pod is ready to accept requests — preventing traffic to unready pods."
+    hint: "Containers share the host OS kernel — unlike VMs which have their own kernel."
   },
   {
-    q: "What is the main purpose of a load balancer in a microservices system?",
-    opts: ["Store service configuration", "Distribute incoming traffic across multiple service instances", "Build container images", "Manage database connections"],
+    q: "What is a microservice?",
+    opts: ["A very small physical server", "A small, independently deployable service focused on one task", "A miniature database", "A compressed container image"],
     ans: 1,
-    hint: "A load balancer evenly distributes requests across instances, improving reliability and scalability."
+    hint: "Microservices are small, autonomous services that work together, each responsible for one business function."
   },
   {
-    q: "In a microservices architecture, what is 'observability'?",
-    opts: ["The ability to watch containers build", "The ability to understand a system's internal state through logs, metrics, and traces", "A Kubernetes dashboard plugin", "Watching container image downloads"],
+    q: "What is Docker Hub?",
+    opts: ["A Docker network switch", "A public registry for storing and sharing container images", "A Docker orchestration tool", "A monitoring dashboard for containers"],
     ans: 1,
-    hint: "Observability (logs, metrics, traces — the 'three pillars') lets you understand what's happening inside services."
+    hint: "Docker Hub is the default public container image registry used by Docker."
   },
   {
-    q: "What is a Docker volume used for?",
-    opts: ["Defining the network interface of a container", "Persisting data beyond the container lifecycle", "Limiting container memory", "Setting container environment variables"],
-    ans: 1,
-    hint: "Volumes persist data even when containers are stopped or deleted — essential for stateful apps."
-  },
-
-  {
-    q: "What is 'blue-green deployment' in microservices?",
-    opts: ["Deploying only on blue servers", "Running two identical environments and switching traffic from old (blue) to new (green)", "A canary rollout strategy", "Colour-coding different microservices"],
-    ans: 1,
-    hint: "Blue-green keeps the old version live until the new version is proven stable — instant switchover with easy rollback."
-  },
-
-  {
-    q: "What is a Kubernetes 'annotation'?",
-    opts: ["A type of label used for routing", "Non-identifying metadata attached to objects, often used by tools", "A comment in a YAML file", "A network tag"],
-    ans: 1,
-    hint: "Unlike labels (used for selection), annotations store arbitrary metadata for tools like Helm or monitoring agents."
+    q: "What command starts a Docker container from an image called 'nginx'?",
+    opts: ["docker start nginx", "docker create nginx", "docker run nginx", "docker launch nginx"],
+    ans: 2,
+    hint: "`docker run` pulls (if needed) and starts a container from the specified image."
   },
 
 
 
 
-   {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  {
+    q: "What is the core principle of a microservices architecture?",
+    opts: ["One large application handles all functions", "Each service is independently deployable and focused on a single business capability", "Services share a single database", "All services must use the same programming language"],
+    ans: 1,
+    hint: "Microservices split an application into small, independent services each owning its own business domain."
+  },
+  {
+    q: "Which communication pattern is most commonly used between microservices for synchronous calls?",
+    opts: ["SOAP over FTP", "REST over HTTP / gRPC", "CORBA", "Raw TCP sockets"],
+    ans: 1,
+    hint: "REST/HTTP and gRPC are the dominant protocols for synchronous microservice-to-microservice communication."
+  },
+  {
+    q: "What is an API Gateway in a microservices architecture?",
+    opts: ["A database shared between services", "A single entry point that routes client requests to the appropriate backend service", "A tool for building container images", "A load balancer for virtual machines"],
+    ans: 1,
+    hint: "An API Gateway acts as the front door for all clients, handling routing, auth, and rate limiting."
+  },
+  {
+    q: "What is the 'Strangler' pattern used for in microservices?",
+    opts: ["Gradually migrating a monolith to microservices by replacing parts incrementally", "Killing idle services to save resources", "Merging multiple services into one", "Securing APIs with token validation"],
+    ans: 0,
+    hint: "Named after a fig tree that grows around a host tree — you progressively replace the monolith, piece by piece."
+  },
+
+  // ── CONTAINERS ──
+  {
+    q: "What is a Container image?",
+    opts: ["A running instance of an application", "A read-only template used to create containers", "A virtual machine snapshot", "A network configuration file"],
+    ans: 1,
+    hint: "An image is a read-only layered template. A running image is called a container."
+  },
+  {
+    q: "Which instruction in a Dockerfile sets the base image for subsequent instructions?",
+    opts: ["BASE", "START", "FROM", "ORIGIN"],
+    ans: 2,
+    hint: "Every Dockerfile must start with a FROM instruction that defines the base image."
+  },
+
+  {
+    q: "How do containers differ from virtual machines?",
+    opts: ["Containers include a full OS kernel; VMs do not", "Containers share the host OS kernel and are more lightweight than VMs", "VMs start faster than containers", "Containers cannot run on Linux"],
+    ans: 1,
+    hint: "Containers share the host kernel and isolate processes using namespaces/cgroups — far lighter than full VMs."
+  },
+  {
+    q: "What is a container registry?",
+    opts: ["A list of running containers on a host", "A storage and distribution system for container images", "A Kubernetes control plane component", "A network policy manager"],
+    ans: 1,
+    hint: "Registries like Docker Hub, ECR, or Harbor store and serve container images."
+  },
+  // ── KUBERNETES ──
+  {
+    q: "What is a Kubernetes Pod?",
+    opts: ["A virtual machine managed by Kubernetes", "The smallest deployable unit — one or more containers sharing network and storage", "A Kubernetes node", "A configuration file for services"],
+    ans: 1,
+    hint: "A Pod wraps one or more containers that share an IP address, hostname, and volumes."
+  },
+  {
+    q: "Which Kubernetes object manages stateful applications like databases, preserving Pod identity across restarts?",
+    opts: ["Deployment", "ReplicaSet", "StatefulSet", "DaemonSet"],
+    ans: 2,
+    hint: "StatefulSet gives each Pod a stable network identity and persistent storage — ideal for DBs like Cassandra."
+  },
+  {
     q: "What is the role of the Kubernetes Scheduler?",
     opts: ["Stores cluster state", "Routes external traffic to Pods", "Assigns newly created Pods to an appropriate node", "Monitors node health"],
     ans: 2,
     hint: "The kube-scheduler watches for unscheduled Pods and selects the best node based on resource requirements."
   },
-  
+  {
+    q: "What does a Kubernetes ConfigMap store?",
+    opts: ["Encrypted passwords and tokens", "Non-sensitive configuration data as key-value pairs", "Container image layers", "Network routing rules"],
+    ans: 1,
+    hint: "ConfigMaps hold non-confidential config data. For secrets, use a Kubernetes Secret instead."
+  },
   {
     q: "Which Kubernetes resource type manages rolling updates and rollbacks for stateless applications?",
     opts: ["CronJob", "StatefulSet", "Deployment", "DaemonSet"],
     ans: 2,
     hint: "Deployments describe the desired state and handle rolling updates and rollbacks automatically."
   },
-   {
-    q: "What is a Kubernetes Liveness Probe used for?",
-    opts: ["Checking if a Pod is ready to receive traffic", "Detecting when a container is deadlocked or unhealthy, and restarting it", "Measuring CPU usage of a Pod", "Validating container image signatures"],
+  {
+    q: "What is a Kubernetes Ingress?",
+    opts: ["A type of persistent storage volume", "An API object that manages external HTTP/S access to services in a cluster", "A tool for building Docker images", "A node-level network policy"],
     ans: 1,
-    hint: "If a liveness probe fails, Kubernetes kills and restarts the container to recover from a stuck state."
+    hint: "Ingress exposes HTTP/S routes from outside the cluster to services inside, supporting host/path-based routing."
   },
-   {
-    q: "In Kubernetes, what does a HorizontalPodAutoscaler (HPA) do?",
-    opts: ["Adds more nodes to the cluster when memory is low", "Automatically scales the number of Pod replicas based on CPU or custom metrics", "Balances storage across volumes", "Distributes Pods evenly across namespaces"],
+  {
+    q: "What command shows all Pods running in the 'default' namespace?",
+    opts: ["kubectl list pods --ns default", "kubectl get pods -n default", "kubectl describe namespace default", "kubectl pods show default"],
     ans: 1,
-    hint: "HPA watches metrics (e.g., CPU utilization) and scales the number of replicas up or down automatically."
+    hint: "`kubectl get pods -n <namespace>` lists all pods in the specified namespace."
   }
+ 
 ];
 
 let current = 0, score = 0, answered = false;
@@ -520,6 +580,7 @@ function shuffle(arr) {
 function startQuiz() {
   shuffled = shuffle(QUESTIONS);
   current = 0; score = 0;
+
   document.getElementById('start-screen').classList.remove('active');
   document.getElementById('result-screen').classList.remove('active');
   document.getElementById('quiz-panel').classList.add('active');
