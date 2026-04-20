@@ -429,7 +429,7 @@ const QUESTIONS = [
  
   // ── CONTAINERS ──
   {
-    q: "What is a Docker image?",
+    q: "What is a Container image?",
     opts: ["A running instance of an application", "A read-only template used to create containers", "A virtual machine snapshot", "A network configuration file"],
     ans: 1,
     hint: "An image is a read-only layered template. A running image is called a container."
@@ -479,7 +479,7 @@ const QUESTIONS = [
   },
   {
     q: "What is a Kubernetes Ingress?",
-    opts: ["A type of persistent storage volume", "An API object that manages external HTTP/S access to services in a cluster", "A tool for building Docker images", "A node-level network policy"],
+    opts: ["A type of persistent storage volume", "An API object that manages external HTTP/S access to services in a cluster", "A tool for building Container images", "A node-level network policy"],
     ans: 1,
     hint: "Ingress exposes HTTP/S routes from outside the cluster to services inside, supporting host/path-based routing."
   },
@@ -510,7 +510,7 @@ const QUESTIONS = [
     hint: "`kubectl` is the command-line interface for running commands against Kubernetes clusters."
   },
   {
-    q: "What does a Docker container run on top of?",
+    q: "What does a container run on top of?",
     opts: ["A hypervisor", "The host operating system kernel", "A separate Linux VM always", "JVM"],
     ans: 1,
     hint: "Containers share the host OS kernel — unlike VMs which have their own kernel."
@@ -528,10 +528,10 @@ const QUESTIONS = [
     hint: "Docker Hub is the default public container image registry used by Docker."
   },
   {
-    q: "What command starts a Docker container from an image called 'nginx'?",
-    opts: ["docker start nginx", "docker create nginx", "docker run nginx", "docker launch nginx"],
+    q: "What command starts a container from an image called 'nginx'?",
+    opts: ["podman start nginx", "podman create nginx", "podman run nginx", "podman launch nginx"],
     ans: 2,
-    hint: "`docker run` pulls (if needed) and starts a container from the specified image."
+    hint: "`podman run` pulls (if needed) and starts a container from the specified image."
   },
   {
     q: "What does the `kubectl get nodes` command show?",
@@ -541,7 +541,7 @@ const QUESTIONS = [
   },
 
   {
-    q: "In Docker, what does the `-p 8080:80` flag do when running a container?",
+    q: "In Podman, what does the `-p 8080:80` flag do when running a container?",
     opts: ["Limits CPU to 80%", "Maps host port 8080 to container port 80", "Sets the container name", "Runs in background mode"],
     ans: 1,
     hint: "Port mapping: `host_port:container_port` — traffic to host:8080 is forwarded to the container's port 80."
@@ -559,10 +559,10 @@ const QUESTIONS = [
     hint: "Loose coupling means services are independent — changes to one don't force changes in others."
   },
   {
-    q: "Which command lists all running containers in Docker?",
-    opts: ["docker images", "docker ps", "docker ls", "docker list"],
+    q: "Which command lists all running containers?",
+    opts: ["podman images", "podman ps", "podman ls", "podman list"],
     ans: 1,
-    hint: "`docker ps` shows running containers. Add `-a` to see all containers including stopped ones."
+    hint: "`podman ps` shows running containers. Add `-a` to see all containers including stopped ones."
   },
   {
     q: "What is a Kubernetes Secret used for?",
@@ -574,7 +574,7 @@ const QUESTIONS = [
     q: "What does 'container image layer' mean?",
     opts: ["A networking layer inside a container", "A read-only filesystem layer that stacks to form an image", "A security policy applied to an image", "A version tag for an image"],
     ans: 1,
-    hint: "Docker images are built from stacked read-only layers. Each Dockerfile instruction adds a layer."
+    hint: "Container images are built from stacked read-only layers. Each Dockerfile instruction adds a layer."
   },
   {
     q: "In Kubernetes, what is a DaemonSet?",
@@ -589,10 +589,10 @@ const QUESTIONS = [
     hint: "Service discovery lets services locate each other dynamically — especially important when IPs change."
   },
   {
-    q: "What is the purpose of the `docker pull` command?",
+    q: "What is the purpose of the `podman pull` command?",
     opts: ["Push an image to a registry", "Download a container image from a registry to local machine", "Remove an image", "List local images"],
     ans: 1,
-    hint: "`docker pull` downloads an image from a registry (e.g., Docker Hub) without running it."
+    hint: "`podman pull` downloads an image from a registry (e.g., Docker Hub) without running it."
   },
   {
     q: "What Kubernetes component runs on every node and ensures containers are running in Pods?",
@@ -619,10 +619,10 @@ const QUESTIONS = [
     hint: "Like an electrical circuit breaker, it 'trips open' when failure is detected, allowing the system to recover."
   },
   {
-    q: "What does the `docker stop` command do?",
+    q: "What does the `podman stop` command do?",
     opts: ["Deletes a container permanently", "Pauses a container", "Gracefully stops a running container", "Stops the Docker daemon"],
     ans: 2,
-    hint: "`docker stop` sends a SIGTERM signal, giving the container time to shut down gracefully."
+    hint: "`podman stop` sends a SIGTERM signal, giving the container time to shut down gracefully."
   },
 
   {
@@ -632,10 +632,10 @@ const QUESTIONS = [
     hint: "Kubernetes automates the operational tasks of containerized workloads — scheduling, scaling, healing."
   },
   {
-    q: "What does `docker images` list?",
-    opts: ["Running containers", "All locally stored Docker images", "Open ports on the host", "Docker network configurations"],
+    q: "What does `podman images` list?",
+    opts: ["Running containers", "All locally stored Container images", "Open ports on the host", "Container network configurations"],
     ans: 1,
-    hint: "`docker images` shows all images stored on the local Docker host."
+    hint: "`podman images` shows all images stored on the local Container host."
   },
 
   {
@@ -651,7 +651,7 @@ const QUESTIONS = [
     hint: "`kubectl apply` is declarative — it creates the resource if it doesn't exist, or updates it if it does."
   },
   {
-    q: "What does the `-d` flag do in `docker run -d nginx`?",
+    q: "What does the `-d` flag do in `podman run -d nginx`?",
     opts: ["Downloads the image first", "Runs the container in detached (background) mode", "Deletes the container on exit", "Disables networking"],
     ans: 1,
     hint: "`-d` (detach) runs the container in the background and prints the container ID."
@@ -659,15 +659,15 @@ const QUESTIONS = [
 
   {
     q: "In microservices, why is each service typically given its own database?",
-    opts: ["To use more storage", "To ensure loose coupling — each service owns its data independently", "To make backups easier", "It is required by Docker"],
+    opts: ["To use more storage", "To ensure loose coupling — each service owns its data independently", "To make backups easier", "It is required by Container"],
     ans: 1,
     hint: "Database-per-service prevents tight coupling and lets each service choose the best database for its needs."
   },
   {
-    q: "What does `docker rm <container>` do?",
-    opts: ["Removes a Docker image", "Deletes a stopped container", "Restarts a container", "Renames a container"],
+    q: "What does `podman rm <container>` do?",
+    opts: ["Removes a Container image", "Deletes a stopped container", "Restarts a container", "Renames a container"],
     ans: 1,
-    hint: "`docker rm` removes a container. The container must be stopped first (or use `-f` to force)."
+    hint: "`podman rm` removes a container. The container must be stopped first (or use `-f` to force)."
   },
   {
     q: "What is a Kubernetes ReplicaSet's job?",
@@ -694,10 +694,10 @@ const QUESTIONS = [
     hint: "Immutable containers are replaced, not updated — this ensures consistency and reproducibility."
   },
   {
-    q: "What does `docker exec -it mycontainer bash` do?",
+    q: "What does `podman exec -it mycontainer bash` do?",
     opts: ["Stops the container named mycontainer", "Opens an interactive bash shell inside the running container", "Builds a new image", "Exports the container filesystem"],
     ans: 1,
-    hint: "`docker exec -it` lets you run commands interactively inside an already-running container."
+    hint: "`podman exec -it` lets you run commands interactively inside an already-running container."
   },
   {
     q: "What is the purpose of Kubernetes labels?",
@@ -732,10 +732,10 @@ const QUESTIONS = [
     hint: "`kubectl logs` fetches the console output from a container — the first debugging tool you'll reach for."
   },
   {
-    q: "What is the purpose of a Docker network?",
+    q: "What is the purpose of a Container network?",
     opts: ["To limit container CPU usage", "To allow containers to communicate with each other and the outside world", "To store images remotely", "To compress container layers"],
     ans: 1,
-    hint: "Docker networks isolate and connect containers — by default, containers on the same network can talk to each other."
+    hint: "Container networks isolate and connect containers — by default, containers on the same network can talk to each other."
   },
   {
     q: "What happens when a Pod crashes in a Kubernetes Deployment?",
