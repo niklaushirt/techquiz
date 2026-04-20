@@ -400,6 +400,7 @@
 </div>
 
 <script>
+
 const QUESTIONS = [
   // ── MICROSERVICES ──
   {
@@ -745,6 +746,9 @@ const QUESTIONS = [
   }
 ];
 
+
+
+
 let current = 0, score = 0, answered = false;
 let shuffled = [];
 
@@ -788,19 +792,27 @@ function renderQuestion() {
   const nextBtn = document.getElementById('next-btn');
   nextBtn.style.display = 'none';
 
+  const indices = [0, 1, 2, 3];
+  for (let i = indices.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [indices[i], indices[j]] = [indices[j], indices[i]];
+  }
+  const shuffledOpts = indices.map(i => q.opts[i]);
+  const shuffledAns = indices.indexOf(q.ans);
+
   const optsEl = document.getElementById('options');
   optsEl.innerHTML = '';
   const keys = ['A', 'B', 'C', 'D'];
-  q.opts.forEach((opt, i) => {
+  shuffledOpts.forEach((opt, i) => {
     const btn = document.createElement('button');
     btn.className = 'opt';
     btn.innerHTML = `<span class="opt-key">${keys[i]}</span>${opt}`;
-    btn.onclick = () => selectAnswer(i);
+    btn.onclick = () => selectAnswer(i, shuffledAns);
     optsEl.appendChild(btn);
   });
 }
 
-function selectAnswer(idx) {
+function selectAnswer(idx, correctIdx) {
   if (answered) return;
   answered = true;
 
@@ -810,14 +822,14 @@ function selectAnswer(idx) {
 
   opts.forEach(b => { b.disabled = true; });
 
-  if (idx === q.ans) {
+  if (idx === correctIdx) {
     score++;
     opts[idx].classList.add('correct');
     fb.className = 'feedback correct';
     fb.textContent = '✓ Correct! ' + q.hint;
   } else {
     opts[idx].classList.add('wrong');
-    opts[q.ans].classList.add('correct');
+    opts[correctIdx].classList.add('correct');
     fb.className = 'feedback wrong';
     fb.textContent = '✗ Incorrect. ' + q.hint;
   }
