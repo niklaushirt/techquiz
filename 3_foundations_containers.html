@@ -413,9 +413,9 @@
   <div class="card">
     <div id="start-screen" class="screen active">
       <h1>Test Your <span>Containers</span> Knowledge</h1>
-      <p>69 questions covering microservices patterns, Docker containers, and Kubernetes fundamentals.</p>
+      <p>5 questions covering microservices patterns, Docker containers, and Kubernetes fundamentals.</p>
       <div class="stat-row">
-        <div class="stat"><div class="val">69</div><div class="lbl">Questions</div></div>
+        <div class="stat"><div class="val">5</div><div class="lbl">Questions</div></div>
         <div class="stat"><div class="val">4</div><div class="lbl">Options each</div></div>
         <div class="stat"><div class="val">∞</div><div class="lbl">Attempts</div></div>
       </div>
@@ -447,7 +447,7 @@
     <div id="result-screen" class="screen">
       <div class="result-ring">
         <div class="result-score" id="final-score">0</div>
-        <div class="result-label" id="result-total">/ 69</div>
+        <div class="result-label" id="result-total">/ 5</div>
       </div>
       <div class="result-grade" id="result-grade"></div>
       <p id="result-msg"></p>
@@ -477,26 +477,42 @@
 
 <script>
 const QUESTIONS = [
-  // ── MICROSERVICES ──
+  // ── CONTAINERS ──
   {
-    q: "What is the core principle of a microservices architecture?",
-    opts: ["One large application handles all functions", "Each service is independently deployable and focused on a single business capability", "Services share a single database", "All services must use the same programming language"],
+    q: "What is a Container image?",
+    opts: ["A running instance of an application", "A read-only template used to create containers", "A virtual machine snapshot", "A network configuration file"],
     ans: 1,
-    hint: "Microservices split an application into small, independent services each owning its own business domain."
+    hint: "An image is a read-only layered template. A running image is called a container."
   },
   {
-    q: "Which communication pattern is most commonly used between microservices for synchronous calls?",
-    opts: ["SOAP over FTP", "REST over HTTP / gRPC", "CORBA", "Raw TCP sockets"],
+    q: "What is a container registry?",
+    opts: ["A list of running containers on a host", "A storage and distribution system for container images", "A Kubernetes control plane component", "A network policy manager"],
     ans: 1,
-    hint: "REST/HTTP and gRPC are the dominant protocols for synchronous microservice-to-microservice communication."
+    hint: "Registries like Docker Hub, ECR, or Harbor store and serve container images."
   },
   {
-    q: "What is an API Gateway in a microservices architecture?",
-    opts: ["A database shared between services", "A single entry point that routes client requests to the appropriate backend service", "A tool for building container images", "A load balancer for virtual machines"],
+    q: "What is a container's main advantage over a traditional application deployment?",
+    opts: ["Requires more memory", "Packages the app and all its dependencies for consistent environments", "Only runs on Linux", "Needs a dedicated server"],
     ans: 1,
-    hint: "An API Gateway acts as the front door for all clients, handling routing, auth, and rate limiting."
-  }
-];
+    hint: "Containers bundle code + runtime + libraries — solving the classic 'works on my machine' problem."
+  },
+  {
+    q: "What does 'immutable container' mean?",
+    opts: ["The container cannot be stopped", "Once built, the container image is never modified — changes require a new image", "The container has no environment variables", "The container runs with no network access"],
+    ans: 1,
+    hint: "Immutable containers are replaced, not updated — this ensures consistency and reproducibility."
+  },
+  {
+    q: "What does `podman exec -it mycontainer bash` do?",
+    opts: ["Stops the container named mycontainer", "Opens an interactive bash shell inside the running container", "Builds a new image", "Exports the container filesystem"],
+    ans: 1,
+    hint: "`podman exec -it` lets you run commands interactively inside an already-running container."
+  },
+ 
+
+
+
+  ];
 
 let current = 0, score = 0, answered = false;
 let shuffled = [];

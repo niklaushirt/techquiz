@@ -252,6 +252,46 @@
     .stat .val { font-size: 28px; font-weight: 700; color: var(--accent); }
     .stat .lbl { font-size: 10px; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; margin-top: 4px; }
 
+    .name-wrap {
+      margin-bottom: 28px;
+      text-align: left;
+      max-width: 320px;
+      margin-inline: auto;
+    }
+    .name-wrap label {
+      display: block;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+    .name-input {
+      width: 100%;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px 16px;
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      font-size: 15px;
+      outline: none;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .name-input::placeholder { color: var(--muted); }
+    .name-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(0,229,160,.1);
+    }
+    .name-error {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--danger);
+      margin-top: 6px;
+      display: none;
+    }
+
     .start-btn, .restart-btn {
       background: var(--accent);
       color: #000;
@@ -318,6 +358,35 @@
     .grade-item .gi-bar { height: 100%; border-radius: 4px; transition: width 1s cubic-bezier(.4,0,.2,1); }
     .grade-item .gi-val { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--text); width: 28px; text-align: right; flex-shrink: 0; }
 
+    .collector-link {
+      display: inline-block;
+      margin-top: 14px;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: .06em;
+      transition: color .15s;
+    }
+    .collector-link:hover { color: var(--accent); }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: .06em;
+      padding: 9px 16px;
+      border-radius: var(--radius);
+      text-decoration: none;
+      transition: border-color .15s, color .15s;
+    }
+    .back-btn:hover { border-color: var(--accent); color: var(--accent); }
+
     @keyframes fadeIn { from { opacity:0; transform: translateY(6px); } to { opacity:1; transform: none; } }
 
     /* quiz panel */
@@ -335,19 +404,25 @@
       </svg>
     </div>
     <div>
-      <div class="brand"><strong>TechQuiz</strong>Microservices &amp; Kubernetes</div>
+      <div class="brand"><strong>Nick's TechQuiz</strong>From Microservices to Kubernetes</div>
     </div>
+    <a class="back-btn" href="index.html">← All Quizzes</a>
   </div>
 
   <!-- START SCREEN -->
   <div class="card">
     <div id="start-screen" class="screen active">
-      <h1>Test Your <span>Microservices &amp; K8s</span> Knowledge</h1>
-      <p>20 questions covering microservices patterns, Docker containers, and Kubernetes fundamentals.</p>
+      <h1>Test Your <span>Microservices</span> Knowledge</h1>
+      <p>5 questions covering microservices patterns, Docker containers, and Kubernetes fundamentals.</p>
       <div class="stat-row">
-        <div class="stat"><div class="val">20</div><div class="lbl">Questions</div></div>
+        <div class="stat"><div class="val">5</div><div class="lbl">Questions</div></div>
         <div class="stat"><div class="val">4</div><div class="lbl">Options each</div></div>
         <div class="stat"><div class="val">∞</div><div class="lbl">Attempts</div></div>
+      </div>
+      <div class="name-wrap">
+        <label for="player-name">Your name</label>
+        <input id="player-name" class="name-input" type="text" placeholder="e.g. Niklaus" maxlength="40" autocomplete="off" />
+        <div class="name-error" id="name-error">Please enter your name to start.</div>
       </div>
       <button class="start-btn" onclick="startQuiz()">Start Quiz →</button>
     </div>
@@ -372,7 +447,7 @@
     <div id="result-screen" class="screen">
       <div class="result-ring">
         <div class="result-score" id="final-score">0</div>
-        <div class="result-label">/ 20</div>
+        <div class="result-label" id="result-total">/ 5</div>
       </div>
       <div class="result-grade" id="result-grade"></div>
       <p id="result-msg"></p>
@@ -394,6 +469,7 @@
         </div>
       </div>
       <button class="restart-btn" onclick="restartQuiz()">↺ Try Again</button>
+      <a class="collector-link" id="collector-link" href="#">📊 View Leaderboard</a>
     </div>
   </div>
 
@@ -401,123 +477,55 @@
 
 <script>
 const QUESTIONS = [
-  // ── ADVANCED ──
-  {
-    q: "What is the difference between CMD and ENTRYPOINT in a Dockerfile?",
-    opts: ["CMD runs at build time, ENTRYPOINT runs at runtime", "ENTRYPOINT defines the executable; CMD provides default arguments that can be overridden", "They are identical", "CMD is for Linux images, ENTRYPOINT for Windows images"],
-    ans: 1,
-    hint: "ENTRYPOINT sets the main executable; CMD sets default args. CMD is easily overridden at `docker run`."
-  },
+  // ── MICROSERVICES ──
 
   {
-    q: "In microservices, what is a 'circuit breaker'?",
-    opts: ["A firewall rule", "A pattern that stops calls to a failing service to prevent cascade failures", "A tool that restarts crashed services", "A load balancer algorithm"],
+    q: "What is the core principle of a microservices architecture?",
+    opts: ["One large application handles all functions", "Each service is independently deployable and focused on a single business capability", "Services share a single database", "All services must use the same programming language"],
     ans: 1,
-    hint: "Like an electrical circuit breaker, it 'trips open' when failure is detected, allowing the system to recover."
+    hint: "Microservices split an application into small, independent services each owning its own business domain."
   },
   {
-    q: "What does 'scaling horizontally' mean for a microservice?",
-    opts: ["Increasing the CPU/RAM of a single instance", "Adding more instances of the service to handle increased load", "Moving the service to a bigger server", "Combining two services into one"],
+    q: "Which communication pattern is most commonly used between microservices for synchronous calls?",
+    opts: ["SOAP over FTP", "REST over HTTP / gRPC", "CORBA", "Raw TCP sockets"],
     ans: 1,
-    hint: "Horizontal scaling (scale out) = more instances. Vertical scaling (scale up) = bigger instance."
+    hint: "REST/HTTP and gRPC are the dominant protocols for synchronous microservice-to-microservice communication."
   },
   {
-    q: "What is etcd in Kubernetes?",
-    opts: ["A container runtime", "A distributed key-value store that holds cluster state", "A network proxy", "A logging agent"],
+    q: "What is a microservice?",
+    opts: ["A very small physical server", "A small, independently deployable service focused on one task", "A miniature database", "A compressed container image"],
     ans: 1,
-    hint: "etcd is the backing store for all Kubernetes cluster data — it's the source of truth."
+    hint: "Microservices are small, autonomous services that work together, each responsible for one business function."
   },
   {
-    q: "What is a Kubernetes Service of type 'ClusterIP'?",
-    opts: ["Exposes the service externally via a cloud load balancer", "Exposes the service only within the cluster — no external access", "Maps a port on every node", "Assigns a static IP to a Pod"],
+    q: "What does the microservices principle 'single responsibility' mean?",
+    opts: ["Only one developer owns each service", "Each service does one thing well", "Each service has one replica", "Services can only use one database"],
     ans: 1,
-    hint: "ClusterIP is the default Service type — the service is reachable only from within the cluster."
-  },
-
-  {
-    q: "In Kubernetes, what is a 'rolling update'?",
-    opts: ["Replacing all pods simultaneously with downtime", "Updating pods incrementally so the app stays available throughout", "A weekly scheduled restart", "Migrating workloads to a new cluster"],
-    ans: 1,
-    hint: "Rolling updates replace old Pod replicas with new ones gradually — zero downtime deploys."
+    hint: "Inspired by the SOLID principle: each microservice should have one reason to change — one job."
   },
   {
-    q: "What is a Kubernetes 'control plane'?",
-    opts: ["The dashboard UI for Kubernetes", "The set of components that manage and control the cluster state", "The physical machines running workloads", "The ingress controller"],
+    q: "In microservices, why is each service typically given its own database?",
+    opts: ["To use more storage", "To ensure loose coupling — each service owns its data independently", "To make backups easier", "It is required by Container"],
     ans: 1,
-    hint: "The control plane (API server, scheduler, controller manager, etcd) makes global decisions about the cluster."
-  },
-
-  {
-    q: "In Kubernetes, what is a 'readiness probe'?",
-    opts: ["Checks if a container is healthy enough to restart", "Determines if a pod is ready to receive traffic", "Validates the Docker image", "Monitors CPU usage"],
-    ans: 1,
-    hint: "A readiness probe tells Kubernetes when a Pod is ready to accept requests — preventing traffic to unready pods."
-  },
-  {
-    q: "What is the main purpose of a load balancer in a microservices system?",
-    opts: ["Store service configuration", "Distribute incoming traffic across multiple service instances", "Build container images", "Manage database connections"],
-    ans: 1,
-    hint: "A load balancer evenly distributes requests across instances, improving reliability and scalability."
-  },
-  {
-    q: "In a microservices architecture, what is 'observability'?",
-    opts: ["The ability to watch containers build", "The ability to understand a system's internal state through logs, metrics, and traces", "A Kubernetes dashboard plugin", "Watching container image downloads"],
-    ans: 1,
-    hint: "Observability (logs, metrics, traces — the 'three pillars') lets you understand what's happening inside services."
-  },
-  {
-    q: "What is a Docker volume used for?",
-    opts: ["Defining the network interface of a container", "Persisting data beyond the container lifecycle", "Limiting container memory", "Setting container environment variables"],
-    ans: 1,
-    hint: "Volumes persist data even when containers are stopped or deleted — essential for stateful apps."
-  },
-
-  {
-    q: "What is 'blue-green deployment' in microservices?",
-    opts: ["Deploying only on blue servers", "Running two identical environments and switching traffic from old (blue) to new (green)", "A canary rollout strategy", "Colour-coding different microservices"],
-    ans: 1,
-    hint: "Blue-green keeps the old version live until the new version is proven stable — instant switchover with easy rollback."
-  },
-
-  {
-    q: "What is a Kubernetes 'annotation'?",
-    opts: ["A type of label used for routing", "Non-identifying metadata attached to objects, often used by tools", "A comment in a YAML file", "A network tag"],
-    ans: 1,
-    hint: "Unlike labels (used for selection), annotations store arbitrary metadata for tools like Helm or monitoring agents."
+    hint: "Database-per-service prevents tight coupling and lets each service choose the best database for its needs."
   },
 
 
 
 
-   {
-    q: "What is the role of the Kubernetes Scheduler?",
-    opts: ["Stores cluster state", "Routes external traffic to Pods", "Assigns newly created Pods to an appropriate node", "Monitors node health"],
-    ans: 2,
-    hint: "The kube-scheduler watches for unscheduled Pods and selects the best node based on resource requirements."
-  },
-  
-  {
-    q: "Which Kubernetes resource type manages rolling updates and rollbacks for stateless applications?",
-    opts: ["CronJob", "StatefulSet", "Deployment", "DaemonSet"],
-    ans: 2,
-    hint: "Deployments describe the desired state and handle rolling updates and rollbacks automatically."
-  },
-   {
-    q: "What is a Kubernetes Liveness Probe used for?",
-    opts: ["Checking if a Pod is ready to receive traffic", "Detecting when a container is deadlocked or unhealthy, and restarting it", "Measuring CPU usage of a Pod", "Validating container image signatures"],
-    ans: 1,
-    hint: "If a liveness probe fails, Kubernetes kills and restarts the container to recover from a stuck state."
-  },
-   {
-    q: "In Kubernetes, what does a HorizontalPodAutoscaler (HPA) do?",
-    opts: ["Adds more nodes to the cluster when memory is low", "Automatically scales the number of Pod replicas based on CPU or custom metrics", "Balances storage across volumes", "Distributes Pods evenly across namespaces"],
-    ans: 1,
-    hint: "HPA watches metrics (e.g., CPU utilization) and scales the number of replicas up or down automatically."
-  }
-];
+
+
+
+
+
+
+
+
+  ];
 
 let current = 0, score = 0, answered = false;
 let shuffled = [];
+let playerName = '';
 
 function shuffle(arr) {
   const a = [...arr];
@@ -529,6 +537,14 @@ function shuffle(arr) {
 }
 
 function startQuiz() {
+  const nameEl = document.getElementById('player-name');
+  const errEl  = document.getElementById('name-error');
+  if (nameEl) {
+    const name = nameEl.value.trim();
+    if (!name) { errEl.style.display = 'block'; nameEl.focus(); return; }
+    errEl.style.display = 'none';
+    playerName = name;
+  }
   shuffled = shuffle(QUESTIONS);
   current = 0; score = 0;
   document.getElementById('start-screen').classList.remove('active');
@@ -559,19 +575,27 @@ function renderQuestion() {
   const nextBtn = document.getElementById('next-btn');
   nextBtn.style.display = 'none';
 
+  const indices = [0, 1, 2, 3];
+  for (let i = indices.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [indices[i], indices[j]] = [indices[j], indices[i]];
+  }
+  const shuffledOpts = indices.map(i => q.opts[i]);
+  const shuffledAns = indices.indexOf(q.ans);
+
   const optsEl = document.getElementById('options');
   optsEl.innerHTML = '';
   const keys = ['A', 'B', 'C', 'D'];
-  q.opts.forEach((opt, i) => {
+  shuffledOpts.forEach((opt, i) => {
     const btn = document.createElement('button');
     btn.className = 'opt';
     btn.innerHTML = `<span class="opt-key">${keys[i]}</span>${opt}`;
-    btn.onclick = () => selectAnswer(i);
+    btn.onclick = () => selectAnswer(i, shuffledAns);
     optsEl.appendChild(btn);
   });
 }
 
-function selectAnswer(idx) {
+function selectAnswer(idx, correctIdx) {
   if (answered) return;
   answered = true;
 
@@ -581,14 +605,14 @@ function selectAnswer(idx) {
 
   opts.forEach(b => { b.disabled = true; });
 
-  if (idx === q.ans) {
+  if (idx === correctIdx) {
     score++;
     opts[idx].classList.add('correct');
     fb.className = 'feedback correct';
     fb.textContent = '✓ Correct! ' + q.hint;
   } else {
     opts[idx].classList.add('wrong');
-    opts[q.ans].classList.add('correct');
+    opts[correctIdx].classList.add('correct');
     fb.className = 'feedback wrong';
     fb.textContent = '✗ Incorrect. ' + q.hint;
   }
@@ -619,6 +643,7 @@ function showResult() {
   const acc = Math.round((score / total) * 100);
 
   document.getElementById('final-score').textContent = score;
+  document.getElementById('result-total').textContent = '/ ' + total;
   document.getElementById('val-correct').textContent = score;
   document.getElementById('val-wrong').textContent = wrong;
   document.getElementById('val-acc').textContent = acc + '%';
@@ -640,6 +665,26 @@ function showResult() {
   }, 100);
 
   document.getElementById('progress-bar').style.width = '100%';
+
+  // Send result to collector via localStorage
+  try {
+    const entry = {
+      name: playerName,
+      score,
+      total,
+      acc,
+      grade,
+      quiz: 'Foundations (Microservices)',
+      ts: new Date().toISOString()
+    };
+    const existing = JSON.parse(localStorage.getItem('techquiz_results') || '[]');
+    existing.push(entry);
+    localStorage.setItem('techquiz_results', JSON.stringify(existing));
+  } catch(e) {}
+
+  // Set leaderboard link
+  const link = document.getElementById('collector-link');
+  if (link) link.href = 'collector.html';
 }
 </script>
 </body>

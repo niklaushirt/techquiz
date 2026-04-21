@@ -412,10 +412,10 @@
   <!-- START SCREEN -->
   <div class="card">
     <div id="start-screen" class="screen active">
-      <h1>Test Your <span>Microservices</span> Knowledge</h1>
-      <p>69 questions covering microservices patterns, Docker containers, and Kubernetes fundamentals.</p>
+      <h1>Test Your <span>Kubernetes</span> Knowledge</h1>
+      <p>5 questions covering microservices patterns, Docker containers, and Kubernetes fundamentals.</p>
       <div class="stat-row">
-        <div class="stat"><div class="val">69</div><div class="lbl">Questions</div></div>
+        <div class="stat"><div class="val">5</div><div class="lbl">Questions</div></div>
         <div class="stat"><div class="val">4</div><div class="lbl">Options each</div></div>
         <div class="stat"><div class="val">∞</div><div class="lbl">Attempts</div></div>
       </div>
@@ -447,7 +447,7 @@
     <div id="result-screen" class="screen">
       <div class="result-ring">
         <div class="result-score" id="final-score">0</div>
-        <div class="result-label" id="result-total">/ 69</div>
+        <div class="result-label" id="result-total">/ 5</div>
       </div>
       <div class="result-grade" id="result-grade"></div>
       <p id="result-msg"></p>
@@ -477,26 +477,44 @@
 
 <script>
 const QUESTIONS = [
-  // ── MICROSERVICES ──
+  // ── KUBERNETES ──
+
   {
-    q: "What is the core principle of a microservices architecture?",
-    opts: ["One large application handles all functions", "Each service is independently deployable and focused on a single business capability", "Services share a single database", "All services must use the same programming language"],
+    q: "What command shows all Pods running in the 'production' namespace?",
+    opts: ["kubectl list pods --ns production", "kubectl get pods -n production", "kubectl describe namespace production", "kubectl pods show production"],
     ans: 1,
-    hint: "Microservices split an application into small, independent services each owning its own business domain."
+    hint: "`kubectl get pods -n <namespace>` lists all pods in the specified namespace."
+  },
+
+  {
+    q: "What is a Kubernetes Secret used for?",
+    opts: ["Storing large binary files", "Storing sensitive data like passwords, tokens, and keys", "Defining resource limits", "Configuring network rules"],
+    ans: 1,
+    hint: "Secrets store sensitive information. They are base64-encoded and can be mounted into Pods."
   },
   {
-    q: "Which communication pattern is most commonly used between microservices for synchronous calls?",
-    opts: ["SOAP over FTP", "REST over HTTP / gRPC", "CORBA", "Raw TCP sockets"],
+    q: "What is `kubectl apply -f deployment.yaml` used for?",
+    opts: ["Deletes resources defined in the file", "Creates or updates Kubernetes resources defined in the YAML file", "Validates the YAML syntax only", "Restarts all pods"],
     ans: 1,
-    hint: "REST/HTTP and gRPC are the dominant protocols for synchronous microservice-to-microservice communication."
+    hint: "`kubectl apply` is declarative — it creates the resource if it doesn't exist, or updates it if it does."
   },
   {
-    q: "What is an API Gateway in a microservices architecture?",
-    opts: ["A database shared between services", "A single entry point that routes client requests to the appropriate backend service", "A tool for building container images", "A load balancer for virtual machines"],
+    q: "What does `kubectl delete pod mypod` do?",
+    opts: ["Stops the pod temporarily", "Permanently removes the pod from the cluster", "Restarts the pod", "Scales down the pod"],
     ans: 1,
-    hint: "An API Gateway acts as the front door for all clients, handling routing, auth, and rate limiting."
+    hint: "Deleting a Pod removes it. If managed by a Deployment or ReplicaSet, a new one will be created automatically."
+  },
+  {
+    q: "What happens when a Pod crashes in a Kubernetes Deployment?",
+    opts: ["The Deployment is deleted", "The node shuts down", "Kubernetes automatically creates a replacement Pod", "The user must manually restart it"],
+    ans: 2,
+    hint: "Kubernetes self-healing: the ReplicaSet controller detects the missing pod and creates a new one."
   }
-];
+
+
+
+
+  ];
 
 let current = 0, score = 0, answered = false;
 let shuffled = [];
@@ -649,7 +667,7 @@ function showResult() {
       total,
       acc,
       grade,
-      quiz: 'Foundations (Microservices)',
+      quiz: 'Foundations (Kubernetes)',
       ts: new Date().toISOString()
     };
     const existing = JSON.parse(localStorage.getItem('techquiz_results') || '[]');
