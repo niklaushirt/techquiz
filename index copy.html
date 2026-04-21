@@ -143,7 +143,6 @@
     .card:hover::before { opacity: 1; }
 
     /* per-card accent colours */
-    .card.starter { --c: #c084fc; }
     .card.basic  { --c: var(--accent); }
     .card.advanced { --c: var(--accent2); }
     .card.other  { --c: var(--accent3); }
@@ -258,7 +257,6 @@
     .card:nth-child(1) { animation: fadeUp .5s .1s ease both; }
     .card:nth-child(2) { animation: fadeUp .5s .2s ease both; }
     .card:nth-child(3) { animation: fadeUp .5s .3s ease both; }
-    .card:nth-child(4) { animation: fadeUp .5s .4s ease both; }
   </style>
 </head>
 <body>
@@ -280,106 +278,23 @@
   <!-- HERO -->
   <div class="hero">
     <div class="hero-tag">Choose your level</div>
-    <h1>How well do you know<br><em>Microservices, Containers &amp; K8s?</em></h1>
-    <p>Quiz tracks — from zero knowledge to advanced concepts. Pick the one that matches your level.</p>
+    <h1>How well do you know<br><em>Containers &amp; K8s?</em></h1>
+    <p>Three quiz tracks — from core concepts to production-grade architecture. Pick the one that matches your level.</p>
   </div>
 
   <!-- CARDS -->
   <div class="cards">
 
-    <!-- STARTER -->
-    <a class="card starter" href="1_intro.html">
-      <div class="card-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/>
-        </svg>
-      </div>
-      <div>
-        <div class="card-level">Level 00 — Starter</div>
-        <div class="card-title">Knowledge Check</div>
-      </div>
-      <div class="card-desc">
-        Brand new to containers or Kubernetes? Start here. Simple questions to build your confidence from zero.
-      </div>
-      <div class="card-meta">
-        <span><strong>20</strong> questions</span>
-        <span><strong>Shuffled</strong> answers</span>
-      </div>
-      <div class="card-cta">
-        <div class="diff">
-          <div class="pip on" style="opacity:.4"></div>
-          <div class="pip"></div>
-          <div class="pip"></div>
-        </div>
-        <span class="cta-btn">Start <span class="cta-arrow">→</span></span>
-      </div>
-    </a>
-  </div>
-  <div class="cards">
-    
     <!-- BASIC -->
-    <a class="card basic" href="2_microservices.html">
+    <a class="card basic" href="basic.html">
       <div class="card-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
         </svg>
       </div>
       <div>
-        <div class="card-level">Level 01 — Foundations</div>
-        <div class="card-title">Microservices</div>
-      </div>
-      <div class="card-desc">
-        Core concepts of microservices, Docker containers, and Kubernetes. Perfect if you're starting out or want to solidify the basics.
-      </div>
-      <div class="card-meta">
-        <span><strong>55</strong> questions</span>
-        <span><strong>Shuffled</strong> answers</span>
-      </div>
-      <div class="card-cta">
-        <div class="diff">
-          <div class="pip on"></div>
-          <div class="pip"></div>
-          <div class="pip"></div>
-        </div>
-        <span class="cta-btn">Start <span class="cta-arrow">→</span></span>
-      </div>
-    </a>
-
-      <a class="card basic" href="3_containers.html">
-      <div class="card-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
-        </svg>
-      </div>
-      <div>
-        <div class="card-level">Level 01 — Foundations</div>
-        <div class="card-title">Containers</div>
-      </div>
-      <div class="card-desc">
-        Core concepts of microservices, Docker containers, and Kubernetes. Perfect if you're starting out or want to solidify the basics.
-      </div>
-      <div class="card-meta">
-        <span><strong>55</strong> questions</span>
-        <span><strong>Shuffled</strong> answers</span>
-      </div>
-      <div class="card-cta">
-        <div class="diff">
-          <div class="pip on"></div>
-          <div class="pip"></div>
-          <div class="pip"></div>
-        </div>
-        <span class="cta-btn">Start <span class="cta-arrow">→</span></span>
-      </div>
-    </a>
-      <a class="card basic" href="4_kubernetes.html">
-      <div class="card-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
-        </svg>
-      </div>
-      <div>
-        <div class="card-level">Level 01 — Foundations</div>
-        <div class="card-title">Kubernetes</div>
+        <div class="card-level">Level 01 — Basic</div>
+        <div class="card-title">Foundations</div>
       </div>
       <div class="card-desc">
         Core concepts of microservices, Docker containers, and Kubernetes. Perfect if you're starting out or want to solidify the basics.
@@ -434,11 +349,11 @@
         </svg>
       </div>
       <div>
-        <div class="card-level">Level 03 — DevOps &amp; CI/CD</div>
-        <div class="card-title">Pipelines</div>
+        <div class="card-level">Level 03 — Security &amp; CI/CD</div>
+        <div class="card-title">Ninja</div>
       </div>
       <div class="card-desc">
-        GitOps, CI/CD pipelines, Helm deployments, Argo CD, Tekton, monitoring with Prometheus, and SRE practices.
+        Security, GitOps, CI/CD pipelines, Operators, Argo CD, Tekton, monitoring and SRE practices.
       </div>
       <div class="card-meta">
         <span><strong>40</strong> questions</span>

@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TechQuiz — Leaderboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #080c10;
+      --surface: #0d1117;
+      --surface2: #161b22;
+      --border: #21262d;
+      --accent: #00e5a0;
+      --accent2: #0af;
+      --danger: #ff4560;
+      --warn: #f97316;
+      --text: #e6edf3;
+      --muted: #8b949e;
+      --radius: 6px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 48px 16px 80px;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,229,160,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,229,160,.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .shell {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 860px;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .header-left { display: flex; align-items: center; gap: 14px; }
+    .logo {
+      width: 44px; height: 44px;
+      background: var(--accent);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 0 24px rgba(0,229,160,.3);
+    }
+    .logo svg { width: 24px; height: 24px; }
+    .brand-sub { font-size: 11px; font-family: 'Space Mono', monospace; color: var(--muted); letter-spacing: .12em; text-transform: uppercase; }
+    .brand-name { font-size: 20px; font-weight: 800; color: var(--text); letter-spacing: -.02em; }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: .06em;
+      padding: 9px 16px;
+      border-radius: var(--radius);
+      text-decoration: none;
+      transition: border-color .15s, color .15s;
+    }
+    .back-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── HERO ── */
+    .hero {
+      margin-bottom: 36px;
+    }
+    .hero-tag {
+      display: inline-block;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid rgba(0,229,160,.3);
+      background: rgba(0,229,160,.06);
+      padding: 5px 14px;
+      border-radius: 20px;
+      margin-bottom: 14px;
+    }
+    .hero h1 {
+      font-size: clamp(24px, 4vw, 38px);
+      font-weight: 800;
+      letter-spacing: -.03em;
+      margin-bottom: 6px;
+    }
+    .hero h1 em { font-style: normal; color: var(--accent); }
+    .hero p { color: var(--muted); font-size: 14px; }
+
+    /* ── STATS ROW ── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 20px;
+      font-family: 'Space Mono', monospace;
+    }
+    .stat-card .val { font-size: 28px; font-weight: 700; color: var(--accent); }
+    .stat-card .lbl { font-size: 10px; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; margin-top: 4px; }
+
+    /* ── TABLE ── */
+    .table-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 24px 48px rgba(0,0,0,.4);
+    }
+
+    .table-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--border);
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .table-title {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: -.01em;
+    }
+
+    .filter-wrap {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .filter-btn {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      padding: 6px 12px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .filter-btn.active, .filter-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(0,229,160,.07); }
+
+    .clear-btn {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      padding: 6px 12px;
+      border-radius: 4px;
+      border: 1px solid rgba(255,69,96,.3);
+      background: rgba(255,69,96,.06);
+      color: var(--danger);
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .clear-btn:hover { background: rgba(255,69,96,.14); }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    thead th {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 12px 20px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface2);
+      white-space: nowrap;
+    }
+    thead th:first-child { width: 48px; text-align: center; }
+
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background .12s;
+      animation: rowIn .3s ease both;
+    }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: rgba(255,255,255,.02); }
+
+    @keyframes rowIn {
+      from { opacity: 0; transform: translateX(-8px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    td {
+      padding: 14px 20px;
+      font-size: 14px;
+      vertical-align: middle;
+    }
+    td:first-child { text-align: center; font-family: 'Space Mono', monospace; font-size: 12px; }
+
+    .rank-medal { font-size: 18px; }
+    .rank-num { color: var(--muted); font-size: 11px; }
+
+    .td-name { font-weight: 700; }
+    .td-quiz { font-size: 12px; color: var(--muted); font-family: 'Space Mono', monospace; }
+
+    .td-score {
+      font-family: 'Space Mono', monospace;
+      font-weight: 700;
+      color: var(--accent);
+      font-size: 15px;
+    }
+    .td-acc {
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+    }
+
+    .acc-bar-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .acc-bar-bg {
+      flex: 1;
+      max-width: 80px;
+      height: 5px;
+      background: var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .acc-bar-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 1s cubic-bezier(.4,0,.2,1);
+    }
+
+    .grade-pill {
+      display: inline-block;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: .06em;
+      padding: 3px 10px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+    .grade-expert    { background: rgba(0,229,160,.12); color: var(--accent); border: 1px solid rgba(0,229,160,.25); }
+    .grade-advanced  { background: rgba(0,170,255,.1);  color: var(--accent2); border: 1px solid rgba(0,170,255,.2); }
+    .grade-inter     { background: rgba(249,115,22,.1); color: var(--warn); border: 1px solid rgba(249,115,22,.2); }
+    .grade-beginner  { background: rgba(255,69,96,.08); color: var(--danger); border: 1px solid rgba(255,69,96,.2); }
+
+    .td-date {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    /* empty state */
+    .empty {
+      padding: 64px 24px;
+      text-align: center;
+    }
+    .empty-icon { font-size: 40px; margin-bottom: 16px; }
+    .empty h3 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+    .empty p { color: var(--muted); font-size: 14px; line-height: 1.6; }
+    .empty a {
+      display: inline-block;
+      margin-top: 20px;
+      background: var(--accent);
+      color: #000;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: 11px 24px;
+      border-radius: var(--radius);
+      text-decoration: none;
+      transition: opacity .15s;
+    }
+    .empty a:hover { opacity: .85; }
+    .live-dot {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: .06em;
+    }
+    .live-dot::before {
+      content: '';
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 6px var(--accent);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: .4; transform: scale(.75); }
+    }
+  </style>
+</head>
+<body>
+<div class="shell">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-left">
+      <div class="logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
+        </svg>
+      </div>
+      <div>
+        <div class="brand-name">Nick's TechQuiz</div>
+        <div class="brand-sub">Results Leaderboard</div>
+      </div>
+    </div>
+    <a class="back-btn" href="index.html">← All Quizzes</a>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-tag">Live results</div>
+    <h1>Who's leading the <em>pack?</em></h1>
+    <p id="subtitle">Results collected from all quiz participants on this device.</p>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="val" id="stat-total">0</div>
+      <div class="lbl">Attempts</div>
+    </div>
+    <div class="stat-card">
+      <div class="val" id="stat-avg">—</div>
+      <div class="lbl">Avg. Accuracy</div>
+    </div>
+    <div class="stat-card">
+      <div class="val" id="stat-best">—</div>
+      <div class="lbl">Best Score</div>
+    </div>
+    <div class="stat-card">
+      <div class="val" id="stat-experts">0</div>
+      <div class="lbl">Experts 🏆</div>
+    </div>
+  </div>
+
+  <!-- TABLE -->
+  <div class="table-wrap">
+    <div class="table-header">
+      <span class="table-title">All Submissions</span>
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+        <span class="live-dot">Live · updates every 5s</span>
+        <div class="filter-wrap">
+        <button class="filter-btn active" onclick="setSort('acc', this)">By Score</button>
+        <button class="filter-btn" onclick="setSort('ts', this)">By Date</button>
+        <button class="filter-btn" onclick="setSort('name', this)">By Name</button>
+        <button class="clear-btn" onclick="clearAll()">Clear All</button>
+      </div>
+      </div>
+    </div>
+    <div id="table-body"></div>
+  </div>
+
+</div>
+
+<script>
+let results = [];
+let sortKey = 'acc';
+
+function load() {
+  try {
+    results = JSON.parse(localStorage.getItem('techquiz_results') || '[]');
+  } catch(e) { results = []; }
+}
+
+function setSort(key, btn) {
+  sortKey = key;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+
+function clearAll() {
+  if (!confirm('Delete all results? This cannot be undone.')) return;
+  localStorage.removeItem('techquiz_results');
+  results = [];
+  render();
+}
+
+function gradeClass(grade) {
+  if (grade.includes('Expert'))       return 'grade-expert';
+  if (grade.includes('Advanced'))     return 'grade-advanced';
+  if (grade.includes('Intermediate')) return 'grade-inter';
+  return 'grade-beginner';
+}
+
+function accColor(acc) {
+  if (acc >= 90) return 'var(--accent)';
+  if (acc >= 75) return 'var(--accent2)';
+  if (acc >= 55) return 'var(--warn)';
+  return 'var(--danger)';
+}
+
+function fmtDate(iso) {
+  const d = new Date(iso);
+  return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+    + ' ' + d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+}
+
+function rank(i) {
+  if (i === 0) return '<span class="rank-medal">🥇</span>';
+  if (i === 1) return '<span class="rank-medal">🥈</span>';
+  if (i === 2) return '<span class="rank-medal">🥉</span>';
+  return `<span class="rank-num">#${i + 1}</span>`;
+}
+
+function render() {
+  const sorted = [...results].sort((a, b) => {
+    if (sortKey === 'acc')  return b.acc - a.acc;
+    if (sortKey === 'ts')   return new Date(b.ts) - new Date(a.ts);
+    if (sortKey === 'name') return a.name.localeCompare(b.name);
+    return 0;
+  });
+
+  // stats
+  document.getElementById('stat-total').textContent = results.length;
+  if (results.length) {
+    const avg = Math.round(results.reduce((s, r) => s + r.acc, 0) / results.length);
+    const best = Math.max(...results.map(r => r.score));
+    const experts = results.filter(r => r.acc >= 90).length;
+    document.getElementById('stat-avg').textContent = avg + '%';
+    document.getElementById('stat-best').textContent = best;
+    document.getElementById('stat-experts').textContent = experts;
+  }
+
+  const body = document.getElementById('table-body');
+
+  if (!sorted.length) {
+    body.innerHTML = `
+      <div class="empty">
+        <div class="empty-icon">📭</div>
+        <h3>No results yet</h3>
+        <p>Complete a quiz to see your results here.</p>
+        <a href="basic.html">Take the Foundations Quiz →</a>
+      </div>`;
+    return;
+  }
+
+  body.innerHTML = `
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Score</th>
+          <th>Accuracy</th>
+          <th>Grade</th>
+          <th>Quiz</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${sorted.map((r, i) => `
+          <tr style="animation-delay:${i * 40}ms">
+            <td>${rank(i)}</td>
+            <td><span class="td-name">${escHtml(r.name)}</span></td>
+            <td><span class="td-score">${r.score}<span style="font-size:11px;color:var(--muted)"> / ${r.total}</span></span></td>
+            <td>
+              <div class="acc-bar-wrap">
+                <span class="td-acc" style="color:${accColor(r.acc)}">${r.acc}%</span>
+                <div class="acc-bar-bg">
+                  <div class="acc-bar-fill" style="width:${r.acc}%;background:${accColor(r.acc)}"></div>
+                </div>
+              </div>
+            </td>
+            <td><span class="grade-pill ${gradeClass(r.grade)}">${r.grade}</span></td>
+            <td><span class="td-quiz">${escHtml(r.quiz || 'Basic')}</span></td>
+            <td><span class="td-date">${fmtDate(r.ts)}</span></td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>`;
+}
+
+function escHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+load();
+render();
+
+setInterval(() => {
+  const prev = results.length;
+  load();
+  if (results.length !== prev) render();
+}, 5000);
+</script>
+</body>
+</html>
