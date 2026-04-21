@@ -469,7 +469,7 @@
         </div>
       </div>
       <button class="restart-btn" onclick="restartQuiz()">↺ Try Again</button>
-      <a class="collector-link" id="collector-link" href="#">📊 View Leaderboard</a>
+      
     </div>
   </div>
 
@@ -960,25 +960,7 @@ function showResult() {
 
   document.getElementById('progress-bar').style.width = '100%';
 
-  // Send result to collector via localStorage
-  <!-- try {
-    const entry = {
-      name: playerName,
-      score,
-      total,
-      acc,
-      grade,
-      quiz: 'Foundations (ALL)',
-      ts: new Date().toISOString()
-    };
-    const existing = JSON.parse(localStorage.getItem('techquiz_results') || '[]');
-    existing.push(entry);
-    localStorage.setItem('techquiz_results', JSON.stringify(existing));
-  } catch(e) {}
-
-  // Set leaderboard link
-  const link = document.getElementById('collector-link');
-  if (link) link.href = 'collector.html'; -->
+  
 }
 </script>
 </body>
