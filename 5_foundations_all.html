@@ -491,6 +491,327 @@ const QUESTIONS = [
     ans: 1,
     hint: "REST/HTTP and gRPC are the dominant protocols for synchronous microservice-to-microservice communication."
   },
+  {
+    q: "What is an API Gateway in a microservices architecture?",
+    opts: ["A database shared between services", "A single entry point that routes client requests to the appropriate backend service", "A tool for building container images", "A load balancer for virtual machines"],
+    ans: 1,
+    hint: "An API Gateway acts as the front door for all clients, handling routing, auth, and rate limiting."
+  },
+  {
+    q: "What is the 'Strangler' pattern used for in microservices?",
+    opts: ["Gradually migrating a monolith to microservices by replacing parts incrementally", "Killing idle services to save resources", "Merging multiple services into one", "Securing APIs with token validation"],
+    ans: 0,
+    hint: "Named after a fig tree that grows around a host tree — you progressively replace the monolith, piece by piece."
+  },
+  {
+    q: "What is a microservice?",
+    opts: ["A very small physical server", "A small, independently deployable service focused on one task", "A miniature database", "A compressed container image"],
+    ans: 1,
+    hint: "Microservices are small, autonomous services that work together, each responsible for one business function."
+  },
+  {
+    q: "What does 'loosely coupled' mean in microservices?",
+    opts: ["Services share code libraries", "Services depend on each other's internal implementation", "Services interact through well-defined interfaces with minimal dependencies", "Services use the same database"],
+    ans: 2,
+    hint: "Loose coupling means services are independent — changes to one don't force changes in others."
+  },
+  {
+    q: "What does the microservices principle 'single responsibility' mean?",
+    opts: ["Only one developer owns each service", "Each service does one thing well", "Each service has one replica", "Services can only use one database"],
+    ans: 1,
+    hint: "Inspired by the SOLID principle: each microservice should have one reason to change — one job."
+  },
+
+  {
+    q: "What does 'service discovery' mean in microservices?",
+    opts: ["Finding bugs in a service", "The mechanism by which services automatically find and communicate with each other", "Publishing a service to an app store", "Monitoring service uptime"],
+    ans: 1,
+    hint: "Service discovery lets services locate each other dynamically — especially important when IPs change."
+  },
+  {
+    q: "In microservices, why is each service typically given its own database?",
+    opts: ["To use more storage", "To ensure loose coupling — each service owns its data independently", "To make backups easier", "It is required by Container"],
+    ans: 1,
+    hint: "Database-per-service prevents tight coupling and lets each service choose the best database for its needs."
+  },
+
+
+
+
+  // ── CONTAINERS ──
+  {
+    q: "What is a Container image?",
+    opts: ["A running instance of an application", "A read-only template used to create containers", "A virtual machine snapshot", "A network configuration file"],
+    ans: 1,
+    hint: "An image is a read-only layered template. A running image is called a container."
+  },
+  {
+    q: "Which instruction in a Dockerfile sets the base image for subsequent instructions?",
+    opts: ["BASE", "START", "FROM", "ORIGIN"],
+    ans: 2,
+    hint: "Every Dockerfile must start with a FROM instruction that defines the base image."
+  },
+
+  {
+    q: "What is a container registry?",
+    opts: ["A list of running containers on a host", "A storage and distribution system for container images", "A Kubernetes control plane component", "A network policy manager"],
+    ans: 1,
+    hint: "Registries like Docker Hub, ECR, or Harbor store and serve container images."
+  },
+
+  {
+    q: "What does a container run on top of?",
+    opts: ["A hypervisor", "The host operating system kernel", "A separate Linux VM always", "JVM"],
+    ans: 1,
+    hint: "Containers share the host OS kernel — unlike VMs which have their own kernel."
+  },
+
+  {
+    q: "What is Docker Hub?",
+    opts: ["A Docker network switch", "A public registry for storing and sharing container images", "A Docker orchestration tool", "A monitoring dashboard for containers"],
+    ans: 1,
+    hint: "Docker Hub is the default public container image registry used by Docker."
+  },
+  {
+    q: "What command starts a container from an image called 'nginx'?",
+    opts: ["podman start nginx", "podman create nginx", "podman run nginx", "podman launch nginx"],
+    ans: 2,
+    hint: "`podman run` pulls (if needed) and starts a container from the specified image."
+  },
+  {
+    q: "In Podman, what does the `-p 8080:80` flag do when running a container?",
+    opts: ["Limits CPU to 80%", "Maps host port 8080 to container port 80", "Sets the container name", "Runs in background mode"],
+    ans: 1,
+    hint: "Port mapping: `host_port:container_port` — traffic to host:8080 is forwarded to the container's port 80."
+  },
+  {
+    q: "Which command lists all running containers?",
+    opts: ["podman images", "podman ps", "podman ls", "podman list"],
+    ans: 1,
+    hint: "`podman ps` shows running containers. Add `-a` to see all containers including stopped ones."
+  },
+  {
+    q: "What does 'container image layer' mean?",
+    opts: ["A networking layer inside a container", "A read-only filesystem layer that stacks to form an image", "A security policy applied to an image", "A version tag for an image"],
+    ans: 1,
+    hint: "Container images are built from stacked read-only layers. Each Dockerfile instruction adds a layer."
+  },
+  {
+    q: "What is the purpose of the `podman pull` command?",
+    opts: ["Push an image to a registry", "Download a container image from a registry to local machine", "Remove an image", "List local images"],
+    ans: 1,
+    hint: "`podman pull` downloads an image from a registry (e.g., Docker Hub) without running it."
+  },
+  {
+    q: "What is a container's main advantage over a traditional application deployment?",
+    opts: ["Requires more memory", "Packages the app and all its dependencies for consistent environments", "Only runs on Linux", "Needs a dedicated server"],
+    ans: 1,
+    hint: "Containers bundle code + runtime + libraries — solving the classic 'works on my machine' problem."
+  },
+  {
+    q: "What does the `podman stop` command do?",
+    opts: ["Deletes a container permanently", "Pauses a container", "Gracefully stops a running container", "Stops the Docker daemon"],
+    ans: 2,
+    hint: "`podman stop` sends a SIGTERM signal, giving the container time to shut down gracefully."
+  },
+
+  {
+    q: "What does `podman images` list?",
+    opts: ["Running containers", "All locally stored Container images", "Open ports on the host", "Container network configurations"],
+    ans: 1,
+    hint: "`podman images` shows all images stored on the local Container host."
+  },
+  {
+    q: "What does 'immutable container' mean?",
+    opts: ["The container cannot be stopped", "Once built, the container image is never modified — changes require a new image", "The container has no environment variables", "The container runs with no network access"],
+    ans: 1,
+    hint: "Immutable containers are replaced, not updated — this ensures consistency and reproducibility."
+  },
+  {
+    q: "What does `podman exec -it mycontainer bash` do?",
+    opts: ["Stops the container named mycontainer", "Opens an interactive bash shell inside the running container", "Builds a new image", "Exports the container filesystem"],
+    ans: 1,
+    hint: "`podman exec -it` lets you run commands interactively inside an already-running container."
+  },
+  {
+    q: "What is the purpose of a Container network?",
+    opts: ["To limit container CPU usage", "To allow containers to communicate with each other and the outside world", "To store images remotely", "To compress container layers"],
+    ans: 1,
+    hint: "Container networks isolate and connect containers — by default, containers on the same network can talk to each other."
+  },
+  {
+    q: "What does `podman rm <container>` do?",
+    opts: ["Removes a Container image", "Deletes a stopped container", "Restarts a container", "Renames a container"],
+    ans: 1,
+    hint: "`podman rm` removes a container. The container must be stopped first (or use `-f` to force)."
+  },
+  {
+    q: "What does the `-d` flag do in `podman run -d nginx`?",
+    opts: ["Downloads the image first", "Runs the container in detached (background) mode", "Deletes the container on exit", "Disables networking"],
+    ans: 1,
+    hint: "`-d` (detach) runs the container in the background and prints the container ID."
+  },
+
+
+
+  // ── KUBERNETES ──
+  {
+    q: "What is a Kubernetes Pod?",
+    opts: ["A virtual machine managed by Kubernetes", "The smallest deployable unit — one or more containers sharing network and storage", "A Kubernetes node", "A configuration file for services"],
+    ans: 1,
+    hint: "A Pod wraps one or more containers that share an IP address, hostname, and volumes."
+  },
+  {
+    q: "Which Kubernetes object manages stateful applications like databases, preserving Pod identity across restarts?",
+    opts: ["Deployment", "ReplicaSet", "StatefulSet", "DaemonSet"],
+    ans: 2,
+    hint: "StatefulSet gives each Pod a stable network identity and persistent storage — ideal for DBs like Cassandra."
+  },
+  {
+    q: "What does a Kubernetes ConfigMap store?",
+    opts: ["Encrypted passwords and tokens", "Non-sensitive configuration data as key-value pairs", "Container image layers", "Network routing rules"],
+    ans: 1,
+    hint: "ConfigMaps hold non-confidential config data. For secrets, use a Kubernetes Secret instead."
+  },
+  {
+    q: "Which Kubernetes resource type manages rolling updates and rollbacks for stateless applications?",
+    opts: ["CronJob", "StatefulSet", "Deployment", "DaemonSet"],
+    ans: 2,
+    hint: "Deployments describe the desired state and handle rolling updates and rollbacks automatically."
+  },
+  {
+    q: "What is a Kubernetes Ingress?",
+    opts: ["A type of persistent storage volume", "An API object that manages external HTTP/S access to services in a cluster", "A tool for building Container images", "A node-level network policy"],
+    ans: 1,
+    hint: "Ingress exposes HTTP/S routes from outside the cluster to services inside, supporting host/path-based routing."
+  },
+  {
+    q: "What command shows all Pods running in the 'production' namespace?",
+    opts: ["kubectl list pods --ns production", "kubectl get pods -n production", "kubectl describe namespace production", "kubectl pods show production"],
+    ans: 1,
+    hint: "`kubectl get pods -n <namespace>` lists all pods in the specified namespace."
+  },
+
+
+  {
+    q: "What does the acronym 'K8s' stand for?",
+    opts: ["Kubernetes", "KubeServices", "KernelSystem", "KloudBase"],
+    ans: 0,
+    hint: "K8s is a shorthand for Kubernetes — there are 8 letters between the 'K' and the 's'."
+  },
+  {
+    q: "What file format is most commonly used to write Kubernetes manifests?",
+    opts: ["JSON only", "XML", "YAML", "TOML"],
+    ans: 2,
+    hint: "Kubernetes resource definitions are almost always written in YAML."
+  },
+  {
+    q: "Which command is the main CLI tool for interacting with a Kubernetes cluster?",
+    opts: ["kubeadm", "kubectl", "helm", "kubelet"],
+    ans: 1,
+    hint: "`kubectl` is the command-line interface for running commands against Kubernetes clusters."
+  },
+
+  {
+    q: "What does the `kubectl get nodes` command show?",
+    opts: ["All pods in the cluster", "All nodes (machines) in the cluster and their status", "Network policies", "All namespaces"],
+    ans: 1,
+    hint: "`kubectl get nodes` lists all nodes registered in the cluster."
+  },
+  {
+    q: "What is a Kubernetes Node?",
+    opts: ["A running container", "A worker machine (VM or physical) that runs Pods", "A namespace", "A storage volume"],
+    ans: 1,
+    hint: "A Node is a worker machine in Kubernetes. Each node runs Pods and is managed by the control plane."
+  },
+  {
+    q: "What is a Kubernetes Secret used for?",
+    opts: ["Storing large binary files", "Storing sensitive data like passwords, tokens, and keys", "Defining resource limits", "Configuring network rules"],
+    ans: 1,
+    hint: "Secrets store sensitive information. They are base64-encoded and can be mounted into Pods."
+  },
+  {
+    q: "In Kubernetes, what is a DaemonSet?",
+    opts: ["A set of background tasks running on the control plane", "Ensures a copy of a Pod runs on every (or selected) node", "A scheduled job that runs periodically", "A group of services behind a load balancer"],
+    ans: 1,
+    hint: "DaemonSets are useful for cluster-wide services like log collectors or monitoring agents on every node."
+  },
+
+  {
+    q: "What Kubernetes component runs on every node and ensures containers are running in Pods?",
+    opts: ["kube-scheduler", "kube-apiserver", "kubelet", "kube-proxy"],
+    ans: 2,
+    hint: "The kubelet is the node agent — it watches the API server and ensures containers match the desired state."
+  },
+  {
+    q: "What does 'kubectl describe pod <name>' do?",
+    opts: ["Deletes the pod", "Shows detailed information about a specific pod", "Restarts the pod", "Lists all pods"],
+    ans: 1,
+    hint: "`kubectl describe` gives detailed info: events, container states, resource usage, and conditions."
+  },
+
+
+  {
+    q: "What is the role of an orchestrator like Kubernetes?",
+    opts: ["Writing application code", "Automating deployment, scaling, and management of containers", "Compiling container images", "Managing DNS records"],
+    ans: 1,
+    hint: "Kubernetes automates the operational tasks of containerized workloads — scheduling, scaling, healing."
+  },
+
+
+
+  {
+    q: "What is `kubectl apply -f deployment.yaml` used for?",
+    opts: ["Deletes resources defined in the file", "Creates or updates Kubernetes resources defined in the YAML file", "Validates the YAML syntax only", "Restarts all pods"],
+    ans: 1,
+    hint: "`kubectl apply` is declarative — it creates the resource if it doesn't exist, or updates it if it does."
+  },
+
+
+
+  {
+    q: "What is a Kubernetes ReplicaSet's job?",
+    opts: ["Runs a pod on every node", "Ensures a specified number of pod replicas are always running", "Stores container images", "Manages persistent volumes"],
+    ans: 1,
+    hint: "A ReplicaSet monitors pods and creates or deletes them to maintain the desired replica count."
+  },
+  {
+    q: "What does 'container orchestration' mean?",
+    opts: ["Drawing container architecture diagrams", "Automated management of containers: scheduling, scaling, healing, networking", "Writing Dockerfiles", "Monitoring container logs"],
+    ans: 1,
+    hint: "Orchestration automates the lifecycle of containers across many machines."
+  },
+  {
+    q: "What is a Kubernetes 'manifest'?",
+    opts: ["A container log file", "A YAML or JSON file that describes a desired Kubernetes resource", "A network diagram", "A Helm chart"],
+    ans: 1,
+    hint: "A manifest is a declarative configuration file — you describe *what* you want, Kubernetes figures out *how*."
+  },
+
+
+
+  {
+    q: "What does `kubectl delete pod mypod` do?",
+    opts: ["Stops the pod temporarily", "Permanently removes the pod from the cluster", "Restarts the pod", "Scales down the pod"],
+    ans: 1,
+    hint: "Deleting a Pod removes it. If managed by a Deployment or ReplicaSet, a new one will be created automatically."
+  },
+
+
+  {
+    q: "In Kubernetes, what does `kubectl logs mypod` show?",
+    opts: ["The Pod's resource usage", "The stdout/stderr output of the container running in the pod", "Kubernetes system events", "The Pod's YAML definition"],
+    ans: 1,
+    hint: "`kubectl logs` fetches the console output from a container — the first debugging tool you'll reach for."
+  },
+
+  {
+    q: "What happens when a Pod crashes in a Kubernetes Deployment?",
+    opts: ["The Deployment is deleted", "The node shuts down", "Kubernetes automatically creates a replacement Pod", "The user must manually restart it"],
+    ans: 2,
+    hint: "Kubernetes self-healing: the ReplicaSet controller detects the missing pod and creates a new one."
+  }
+
 
 
 
