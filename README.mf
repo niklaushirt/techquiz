@@ -1,0 +1,13 @@
+
+
+
+# ── Read file contents ─────────────────────────────────────────
+@app.get("/files/{name}")
+def read_file(name: str):
+    path = _path(name)
+    if not path.exists():
+        raise HTTPException(404, f"'{name}' not found")
+    return {"record": _read(path)}
+
+
+
