@@ -15,6 +15,7 @@
       --accent: #00e5a0;
       --accent2: #0af;
       --accent3: #f97316;
+      --accent4: #ee16f9;
       --danger: #ff4560;
       --text: #e6edf3;
       --muted: #8b949e;
@@ -122,6 +123,7 @@
       border: 1px solid var(--border);
       border-radius: 14px;
       padding: 32px 28px;
+      margin-top: 20px;
       display: flex;
       flex-direction: column;
       gap: 20px;
@@ -144,6 +146,12 @@
 
     /* per-card accent colours */
     .card.starter { --c: #c084fc; }
+    .card.f1  { --c: var(--accent); }
+    .card.f2  { --c: var(--accent2); }
+    .card.f3  { --c: var(--accent3); }
+    .card.f4  { --c: var(--accent4); }
+    .card.a1  { --c: var(--accentm); }
+    .card.o1  { --c: var(--accent4); }
     .card.basic  { --c: var(--accent); }
     .card.advanced { --c: var(--accent2); }
     .card.other  { --c: var(--accent3); }
@@ -299,7 +307,8 @@
         <div class="card-title">Knowledge Check</div>
       </div>
       <div class="card-desc">
-        Brand new to Containers or Kubernetes? Let's check your basic knowledge.
+        Brand new to Containers or Kubernetes? Let's check your basic knowledge.<BR>
+      🥇 With Leaderboard.
       </div>
       <div class="card-meta">
         <span><strong>5</strong> questions</span>
@@ -318,7 +327,7 @@
   <div class="cards">
     
     <!-- BASIC -->
-    <a class="card basic" href="2_foundations_microservices.html">
+    <a class="card f1" href="2_foundations_microservices.html">
       <div class="card-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
@@ -329,7 +338,8 @@
         <div class="card-title">Microservices</div>
       </div>
       <div class="card-desc">
-        Core concepts of Microservices. Perfect if you're starting out or want to solidify the basics.
+        Core concepts of Microservices. Perfect if you're starting out or want to solidify the basics.<BR>
+      🥇 With Leaderboard.
       </div>
       <div class="card-meta">
         <span><strong>5</strong> questions</span>
@@ -345,7 +355,7 @@
       </div>
     </a>
 
-      <a class="card basic" href="3_foundations_containers.html">
+      <a class="card f2" href="3_foundations_containers.html">
       <div class="card-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
@@ -356,7 +366,8 @@
         <div class="card-title">Containers</div>
       </div>
       <div class="card-desc">
-        Core concepts of Containers. Perfect if you're starting out or want to solidify the basics.
+        Core concepts of Containers. Perfect if you're starting out or want to solidify the basics.<BR>
+      🥇 With Leaderboard.
       </div>
       <div class="card-meta">
         <span><strong>5</strong> questions</span>
@@ -371,7 +382,7 @@
         <span class="cta-btn">Start <span class="cta-arrow">→</span></span>
       </div>
     </a>
-      <a class="card basic" href="4_foundations_kubernetes.html">
+      <a class="card f3" href="4_foundations_kubernetes.html">
       <div class="card-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
@@ -382,7 +393,8 @@
         <div class="card-title">Kubernetes</div>
       </div>
       <div class="card-desc">
-        Core concepts of Kubernetes. Perfect if you're starting out or want to solidify the basics.
+        Core concepts of Kubernetes. Perfect if you're starting out or want to solidify the basics.<BR>
+      🥇 With Leaderboard.
       </div>
       <div class="card-meta">
         <span><strong>5</strong> questions</span>
@@ -397,18 +409,20 @@
         <span class="cta-btn">Start <span class="cta-arrow">→</span></span>
       </div>
     </a>
-        <a class="card basic" href="5_foundations_all.html">
+        <a class="card f4" href="5_foundations_all.html">
       <div class="card-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
         </svg>
       </div>
+      
       <div>
         <div class="card-level">Level 01 — Foundations</div>
         <div class="card-title">Big Quizz</div>
       </div>
       <div class="card-desc">
-        Core concepts of microservices, Containers, and Kubernetes. Check everything you have learnt in one quiz.
+        Core concepts of microservices, Containers, and Kubernetes. Check everything you have learnt in one quiz.<BR>
+        No Leaderboard.
       </div>
       <div class="card-meta">
         <span><strong>50</strong> questions</span>
@@ -426,7 +440,7 @@
   </div>
   <div class="cards">
     <!-- ADVANCED -->
-    <a class="card advanced" href="advanced.html">
+    <a class="card a1" href="advanced.html">
       <div class="card-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
@@ -454,7 +468,7 @@
     </a>
 
     <!-- OTHER -->
-    <a class="card other" href="other.html">
+    <a class="card o1" href="other.html">
       <div class="card-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M4.93 4.93a10 10 0 0 0 0 14.14"/>

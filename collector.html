@@ -12,7 +12,7 @@
       --surface: #0d1117;
       --surface2: #161b22;
       --border: #21262d;
-      --accent: #00e5a0;
+      --accent: #f97316;
       --accent2: #0af;
       --danger: #ff4560;
       --warn: #f97316;
@@ -315,6 +315,21 @@
       transition: opacity .15s;
     }
     .empty a:hover { opacity: .85; }
+    .badge-cloud {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: 'Space Mono', monospace; font-size: 10px;
+      color: var(--accent); letter-spacing: .06em;
+      background: rgba(0,229,160,.06); border: 1px solid rgba(0,229,160,.2);
+      padding: 4px 10px; border-radius: 20px;
+    }
+    .badge-local {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: 'Space Mono', monospace; font-size: 10px;
+      color: var(--warn); letter-spacing: .06em;
+      background: rgba(249,115,22,.06); border: 1px solid rgba(249,115,22,.2);
+      padding: 4px 10px; border-radius: 20px; cursor: help;
+    }
+
     .live-dot {
       display: inline-flex;
       align-items: center;
@@ -389,7 +404,8 @@
     <div class="table-header">
       <span class="table-title">All Submissions</span>
       <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
-        <span class="live-dot">Live · updates every 5s</span>
+        <span id="storage-badge"></span>
+        <span class="live-dot">updates every 5s</span>
         <div class="filter-wrap">
         <button class="filter-btn active" onclick="setSort('acc', this)">By Score</button>
         <button class="filter-btn" onclick="setSort('ts', this)">By Date</button>
@@ -403,16 +419,68 @@
 
 </div>
 
+<script src="config.js"></script>
 <script>
 let results = [];
 let sortKey = 'acc';
+let isCloud = false;
 
-function load() {
-  try {
-    results = JSON.parse(localStorage.getItem('techquiz_results') || '[]');
-  } catch(e) { results = []; }
+// ── Data layer ─────────────────────────────────────────
+async function load() {
+  const { binId, apiUrl } = TECHQUIZ_CONFIG;
+  isCloud = binId && binId !== 'YOUR_BIN_ID_HERE';
+
+  if (isCloud) {
+    try {
+      const res = await fetch(`${apiUrl}/files/${binId}`, {
+        headers: {  }
+      });
+      if (!res.ok) throw new Error('fetch failed');
+      const data = await res.json();
+      results = Array.isArray(data.record) ? data.record : [];
+      //results = Array.isArray(data.record);
+      setStatus('cloud');
+      return;
+    } catch(e) {
+      console.warn('Cloud load failed.', e);
+    }
+  }
+
 }
 
+async function clearAll() {
+  if (!confirm('Delete ALL results permanently? This cannot be undone.')) return;
+  results = [];
+  // Clear JSONBin
+  const { binId, apiUrl } = TECHQUIZ_CONFIG;
+  if (isCloud) {
+    try {
+      await fetch(`${apiUrl}/files/${binId}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' }
+      });
+    } catch(e) { console.warn('Cloud clear failed.', e); }
+  }
+  render();
+}
+
+
+
+
+
+
+// ── Status badge ───────────────────────────────────────
+function setStatus(mode) {
+  const el = document.getElementById('storage-badge');
+  if (!el) return;
+  if (mode === 'cloud') {
+    el.innerHTML = `<span class="badge-cloud">☁ Cloud storage · live</span>`;
+  } else {
+    el.innerHTML = `<span class="badge-local" title="Set binId & apiKey in config.js to enable cross-device storage">⚠ Local only · configure config.js for cloud</span>`;
+  }
+}
+
+// ── UI helpers ─────────────────────────────────────────
 function setSort(key, btn) {
   sortKey = key;
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -420,17 +488,11 @@ function setSort(key, btn) {
   render();
 }
 
-function clearAll() {
-  if (!confirm('Delete all results? This cannot be undone.')) return;
-  localStorage.removeItem('techquiz_results');
-  results = [];
-  render();
-}
-
 function gradeClass(grade) {
-  if (grade.includes('Expert'))       return 'grade-expert';
-  if (grade.includes('Advanced'))     return 'grade-advanced';
-  if (grade.includes('Intermediate')) return 'grade-inter';
+  if (!grade) return 'grade-beginner';
+  if (grade.includes('Expert') || grade.includes('Ready'))    return 'grade-expert';
+  if (grade.includes('Advanced') || grade.includes('Good'))   return 'grade-advanced';
+  if (grade.includes('Intermediate') || grade.includes('Getting') || grade.includes('Solid')) return 'grade-inter';
   return 'grade-beginner';
 }
 
@@ -454,7 +516,14 @@ function rank(i) {
   return `<span class="rank-num">#${i + 1}</span>`;
 }
 
+function escHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
 function render() {
+
+  console.log('Rendering', results.length, 'results sorted by', sortKey);
+
   const sorted = [...results].sort((a, b) => {
     if (sortKey === 'acc')  return b.acc - a.acc;
     if (sortKey === 'ts')   return new Date(b.ts) - new Date(a.ts);
@@ -462,26 +531,24 @@ function render() {
     return 0;
   });
 
-  // stats
   document.getElementById('stat-total').textContent = results.length;
   if (results.length) {
-    const avg = Math.round(results.reduce((s, r) => s + r.acc, 0) / results.length);
-    const best = Math.max(...results.map(r => r.score));
+    const avg     = Math.round(results.reduce((s, r) => s + r.acc, 0) / results.length);
+    const best    = Math.max(...results.map(r => r.score));
     const experts = results.filter(r => r.acc >= 90).length;
-    document.getElementById('stat-avg').textContent = avg + '%';
-    document.getElementById('stat-best').textContent = best;
+    document.getElementById('stat-avg').textContent     = avg + '%';
+    document.getElementById('stat-best').textContent    = best;
     document.getElementById('stat-experts').textContent = experts;
   }
 
   const body = document.getElementById('table-body');
-
   if (!sorted.length) {
     body.innerHTML = `
       <div class="empty">
         <div class="empty-icon">📭</div>
         <h3>No results yet</h3>
         <p>Complete a quiz to see your results here.</p>
-        <a href="basic.html">Take the Foundations Quiz →</a>
+        <a href="starter.html">Take the Knowledge Check →</a>
       </div>`;
     return;
   }
@@ -490,13 +557,8 @@ function render() {
     <table>
       <thead>
         <tr>
-          <th>#</th>
-          <th>Name</th>
-          <th>Score</th>
-          <th>Accuracy</th>
-          <th>Grade</th>
-          <th>Quiz</th>
-          <th>Date</th>
+          <th>#</th><th>Name</th><th>Score</th>
+          <th>Accuracy</th><th>Grade</th><th>Quiz</th><th>Date</th>
         </tr>
       </thead>
       <tbody>
@@ -522,18 +584,16 @@ function render() {
     </table>`;
 }
 
-function escHtml(str) {
-  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+// ── Boot & poll ────────────────────────────────────────
+async function refresh() {
+  const prev = results.length;
+  await load();
+  render();
 }
 
-load();
-render();
-
-setInterval(() => {
-  const prev = results.length;
-  load();
-  if (results.length !== prev) render();
-}, 5000);
+refresh();
+setInterval(refresh, 5000);
+</script>
 </script>
 </body>
 </html>
